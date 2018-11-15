@@ -17,17 +17,19 @@ class PageOneState extends State<PageOne> {
   void initState() {
     super.initState();
 
-    EventChannelManager.registerAndroid2Flutter((event) {
-      print("PageOneState EventChannelManager registerAndroid2Flutter $event");
+    EventChannelManager.receiveAndroid2FlutterForNet((event) {
+      print(
+          "It is Flutter -  EventChannelManager receiveAndroid2FlutterForNet $event");
     });
 
-    BasicMassageChannelManager.registerAndroid2Flutter((str) {
+    BasicMessageChannelManager.registerAndroid2Flutter((str) {
       print(
-          "PageOneState BasicMassageChannelManager registerAndroid2Flutter $str");
+          "It is Flutter -  BasicMassageChannelManager registerAndroid2Flutter $str");
     });
-    BasicMassageChannelManager.registerAndroid2FlutterBinary((byteData) {
+
+    BasicMessageChannelManager.registerAndroid2FlutterBinary((byteData) {
       print(
-          "PageOneState BasicMassageChannelManagerBinary registerAndroid2Flutter $byteData");
+          "It is Flutter -  BasicMassageChannelManagerBinary registerAndroid2Flutter $byteData");
     });
   }
 
@@ -54,21 +56,36 @@ class PageOneState extends State<PageOne> {
               child: Text(toastText),
               onPressed: () async {
                 toastText = await MethodChannelManager.sendFlutter2Android(
-                    "send to native");
+                    "send to native by method channel");
                 print(toastText);
                 setState(() {});
               },
             ),
             RaisedButton(
-              child: Text("sendFlutter2Android"),
+              child: Text("event default"),
               onPressed: () async {
-                await BasicMassageChannelManager.sendFlutter2Android();
+                EventChannelManager.receiveAndroid2FlutterForDefault((data) {
+                  print(
+                      "It is Flutter -  EventChannelManager registerAndroid2FlutterForDefault $data");
+                });
               },
             ),
             RaisedButton(
-              child: Text("sendFlutter2AndroidBinary"),
+              child: Text("basic message sendFlutter2Android"),
               onPressed: () async {
-                await BasicMassageChannelManager.sendFlutter2AndroidBinary();
+                var res = await BasicMessageChannelManager.sendFlutter2Android(
+                    "send to native from flutter by basic message");
+                print(
+                    "It is Flutter - BasicMessageChannelManager sendFlutter2Android res: $res");
+              },
+            ),
+            RaisedButton(
+              child: Text("basic message  sendFlutter2AndroidBinary"),
+              onPressed: () async {
+                var res = await BasicMessageChannelManager
+                    .sendFlutter2AndroidBinary();
+                print(
+                    "It is Flutter - BasicMessageChannelManager sendFlutter2AndroidBinary res: $res");
               },
             ),
           ],
