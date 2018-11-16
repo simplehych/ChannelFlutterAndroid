@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_flutter/flutter_channel_manager.dart';
 import 'package:my_flutter/navigator_manager.dart';
 import 'package:my_flutter/page_two.dart';
@@ -16,15 +17,24 @@ class PageOneState extends State<PageOne> {
   @override
   void initState() {
     super.initState();
-
     EventChannelManager.receiveAndroid2FlutterForNet((event) {
       print(
           "It is Flutter -  EventChannelManager receiveAndroid2FlutterForNet $event");
     });
 
-    BasicMessageChannelManager.registerAndroid2Flutter((str) {
+    EventChannelManager.receiveAndroid2FlutterForDefault((event) {
       print(
-          "It is Flutter -  BasicMassageChannelManager registerAndroid2Flutter $str");
+          "It is Flutter -  EventChannelManager receiveAndroid2FlutterForNet $event");
+    });
+
+    BasicMessageChannelManager.registerAndroid2Flutter((str) async {
+      print("It is Flutter - BasicMessageChannelManager registerAndroid2Flutter ");
+      var maybePop = await Navigator.maybePop(context);
+      print("It is Flutter - BasicMessageChannelManager registerAndroid2Flutter maybePop: $maybePop ");
+
+      if (!maybePop) {
+        BasicMessageChannelManager.sendFlutter2Android("native_back");
+      }
     });
 
     BasicMessageChannelManager.registerAndroid2FlutterBinary((byteData) {
@@ -64,9 +74,10 @@ class PageOneState extends State<PageOne> {
             RaisedButton(
               child: Text("event default"),
               onPressed: () async {
-                EventChannelManager.receiveAndroid2FlutterForDefault((data) {
+                // Event Flutter端可以一直点击接收，但是在Native端却不可以一点点击注册发送
+                EventChannelManager.receiveAndroid2FlutterForBack((data) {
                   print(
-                      "It is Flutter -  EventChannelManager registerAndroid2FlutterForDefault $data");
+                      "It is Flutter -  EventChannelManager receiveAndroid2FlutterForBack $data");
                 });
               },
             ),

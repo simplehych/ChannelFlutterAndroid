@@ -22,13 +22,13 @@ Widget _widgetForRoute(String route) {
         child: Text("default"),
       );
   }
-
   return MaterialApp(
     home: widget,
   );
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

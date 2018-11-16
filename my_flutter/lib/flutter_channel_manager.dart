@@ -16,16 +16,21 @@ class MethodChannelManager {
 
 class EventChannelManager {
   static const _BASIC_NAME = "com.simple.channelflutterandroid/event";
-  static const _NET = "net";
-  static const _DEFAULT = "default";
+  static const _NET = "$_BASIC_NAME/net";
+  static const _BACK = "$_BASIC_NAME/back";
+  static const _DEFAULT = "$_BASIC_NAME/default";
   static const _eventChannel = EventChannel("$_BASIC_NAME");
 
   static receiveAndroid2FlutterForNet(void onData(event)) {
-    _eventChannel.receiveBroadcastStream(_NET).listen(onData);
+    EventChannel("$_NET").receiveBroadcastStream(_NET).listen(onData);
+  }
+
+  static receiveAndroid2FlutterForBack(void onData(event)) {
+    EventChannel("$_BACK").receiveBroadcastStream(_BACK).listen(onData);
   }
 
   static receiveAndroid2FlutterForDefault(void onData(event)) {
-    _eventChannel.receiveBroadcastStream(_DEFAULT).listen(onData);
+    EventChannel("$_DEFAULT").receiveBroadcastStream(_DEFAULT).listen(onData);
   }
 }
 
@@ -42,6 +47,7 @@ class BasicMessageChannelManager {
 
   static registerAndroid2Flutter(Future<String> handler(String str)) {
     _basicMessageChannel.setMessageHandler(handler);
+    scheduleMicrotask((){});
   }
 
   static Future sendFlutter2AndroidBinary() async {
