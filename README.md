@@ -6,6 +6,9 @@
     头条混合开发方案：https://mp.weixin.qq.com/s/wdbVVzZJFseX2GmEbuAdfA
 
     https://www.jianshu.com/p/1317aed6cd8c
+    
+    WanAndroid客户端简单Flutter版 Apk下载地址：
+    https://github.com/simplehych/simple_flutter/blob/master/apk/app-release.apk
 
 ## 集成已有项目
 
